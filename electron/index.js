@@ -36,26 +36,7 @@ async function createWindow() {
 	const filter = {
 		urls: ["<all_urls>"],
 	};
-	const { session } = win.webContents;
 
-	session.webRequest.onBeforeSendHeaders(filter, (details, callback) => {
-		if (
-			[
-				"https://discord.com/api/v9/users/@me/library",
-				"https://discord.com/api/v9/users/@me/guilds/premium/subscriptions",
-				"https://discord.com/api/v9/science",
-			].includes(details.url) ||
-			details.url.includes("https://discord.com/api/v9/users/@me/billing/trials/") ||
-			details.url.includes("https://discord.com/api/v9/users/@me/applications/")
-		) {
-			return callback({ cancel: true });
-		}
-		if (details.url.startsWith("https://discord.com/assets")) {
-			details.requestHeaders["User-Agent"] =
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.159 Safari/537.36";
-		} else {
-			delete details.requestHeaders["User-Agent"];
-		}
 
 		callback({ requestHeaders: details.requestHeaders });
 	});
